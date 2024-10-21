@@ -4,9 +4,9 @@ import type { UploadFile, UploadProps } from 'antd';
 import ImgCrop from 'antd-img-crop';
 
 type PropType = {
-  setFile: (file: any)=> void
+  setFile: (file: any) => void
 }
-const Index = ({setFile}:PropType) => {
+const Index = ({ setFile }: PropType) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
@@ -14,11 +14,11 @@ const Index = ({setFile}:PropType) => {
     setFile(newFileList[0])
   };
 
-  const beforeUpload =()=>{
+  const beforeUpload = () => {
     return false
   }
   return (
-     <ImgCrop rotationSlider>
+    <ImgCrop rotationSlider>
       <Upload
         listType="picture-card"
         fileList={fileList}
