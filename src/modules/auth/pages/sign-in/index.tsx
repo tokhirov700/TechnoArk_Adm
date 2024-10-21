@@ -1,8 +1,8 @@
-import { Button, Form, Input } from 'antd';
-import { NavLink } from 'react-router-dom';
 import { SignInTypes } from '../../types';
 import { useSignInMutation } from '../../hooks/mutations';
 import logo from '../../../../assets/erp_logo.png';
+import { Button, Form, Input } from 'antd';
+import { NavLink } from 'react-router-dom';
 
 const SignIn = () => {
     const { mutate } = useSignInMutation();
@@ -12,27 +12,25 @@ const SignIn = () => {
     };
 
     const onFinishFailed = () => {
-        console.log('Failed:');
+        console.log('Failed to sign in.');
     };
 
     return (
         <div className='flex'>
             <div>
-                <img className='h-screen' src={logo} alt="logo" />
+                <img className='h-screen' src={logo} alt="ERP Logo" />
             </div>
             <div className='w-1/2'>
                 <div className='h-screen flex flex-col justify-center px-48'>
                     <h1 className='flex justify-start mb-8 font-extrabold text-4xl'>Login</h1>
                     <Form
-                        name="basic"
-                        labelCol={{ span: 10 }}
-                        wrapperCol={{ span: 500 }}
+                        name="signInForm"
                         style={{ maxWidth: 1000 }}
                         initialValues={{ remember: true }}
                         onFinish={onFinish}
                         onFinishFailed={onFinishFailed}
                         autoComplete="off"
-                        layout='vertical'
+                        layout="vertical"
                     >
                         <Form.Item
                             label="Phone number"
@@ -50,18 +48,18 @@ const SignIn = () => {
                             <Input.Password style={{ borderColor: '#d55200' }} />
                         </Form.Item>
 
-                        <Form.Item wrapperCol={{ offset: 0 }}>
+                        <Form.Item>
                             <Button
-                                className='w-full'
+                                className="w-full"
                                 type="primary"
                                 htmlType="submit"
                                 style={{ backgroundColor: '#d55200', borderColor: '#d55200' }}
                             >
                                 Submit
                             </Button>
-                            <p>
-                                Don't you have an account?{' '}
-                                <NavLink to="/sign-up" className="font-bold pt-1">Register</NavLink>
+                            <p className="mt-4">
+                                Don't have an account?{' '}
+                                <NavLink to="/sign-up" className="font-bold">Register</NavLink>
                             </p>
                         </Form.Item>
                     </Form>
