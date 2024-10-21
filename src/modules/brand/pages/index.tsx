@@ -1,137 +1,124 @@
 import { useState, useEffect } from 'react';
 import { Button, Space, Tooltip } from "antd";
-import { EditFilled, CloseCircleFilled } from "@ant-design/icons";
-import { useLocation, useNavigate } from 'react-router-dom';
 import { useGetBrand } from '../hooks/queries';
 import { useDeleteBrand } from '../hooks/mutations';
-import { ColumnsType } from '@types';
 import BrandModal from './modal';
-import { GlobalTable, Search, ConfirmDelete } from '@components';
+import { GlobalTable, Search } from '@components';
+import { EditFilled, CloseCircleFilled } from "@ant-design/icons";
+import { useLocation, useNavigate } from 'react-router-dom';
 import { PaginationType } from '../types';
 
-const Index = () => {
-    const [update, setUpdate] = useState(null);
-    const [modalVisible, setModalVisible] = useState(false);
-    const navigate = useNavigate();
-    const [params, setParams] = useState({
-        limit: 5,
-        page: 1,
-        search: ""
+const BrandPage = () => {
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const navigateTo = useNavigate();
+  const [queryParams, setQueryParams] = useState({
+    limit: 5,
+    page: 1,
+    search: ""
+  });
+
+  const { search: searchParams } = useLocation();
+  const { data } = useGetBrand(queryParams);
+  const { brands, count } = data || {};
+  const { mutate: removeBrand } = useDeleteBrand();
+
+  useEffect(() => {
+    const searchParamsObj = new URLSearchParams(searchParams);
+    setQueryParams({
+      limit: Number(searchParamsObj.get("limit")) || 5,
+      page: Number(searchParamsObj.get("page")) || 1,
+      search: searchParamsObj.get("search_val") || ""
     });
-    const { search } = useLocation();
-    const { data } = useGetBrand(params);
-    const { brands, count } = data || {};
-    const { mutate: deleteBrand } = useDeleteBrand();
+  }, [searchParams]);
 
-    useEffect(() => {
-        const params = new URLSearchParams(search);
-        const page = Number(params.get("page")) || 1;
-        const limit = Number(params.get("limit")) || 5;
-        const search_val = params.get("seatch_val") || "";
-        setParams((prev) => ({
-            ...prev,
-            search: search_val,
-            limit: limit,
-            page: page
-        }));
-    }, [search]);
-
-    const columns = [
-        {
-            title: '№',
-            dataIndex: 'index',
-            key: 'index',
-            render: (_text: string, _record: any, index: number) => `${(params.page - 1) * params.limit + index + 1}`,
-        },
-        {
-            title: "Name",
-            dataIndex: "name",
-            key: "name"
-        },
-        {
-            title: "Action",
-            key: "action",
-            render: (_text: string, record: ColumnsType) => (
-                <Space size={"middle"}>
-                    <Tooltip title="Edit">
-                        <Button
-                            type="default"
-                            onClick={() => editData(record)}
-                            icon={<EditFilled />}
-                            style={{ width: "45px", color: "#1890ff", borderColor: "#1890ff" }}
-                        />
-                    </Tooltip>
-                    <ConfirmDelete
-                        title="Delete brand?"
-                        description="Are you sure to delete this brand?"
-                        onConfirm={() => deleteData(record.id)}
-                    >
-                        <Tooltip title="Delete">
-                            <Button style={{ width: "45px", color: "#ff4d4f", borderColor: "#ff4d4f" }}>
-                                <CloseCircleFilled />
-                            </Button>
-                        </Tooltip>
-                    </ConfirmDelete>
-                </Space>
-            ),
-        }
-    ];
-
-    const editData = (data: any) => {
-        setUpdate(data);
-        setModalVisible(true);
-    };
-    
-    const deleteData = (id: any) => {
-        deleteBrand(id);
-    };
-    
-    const handleCancel = () => {
-        setUpdate(null);
-        setModalVisible(false);
-    };
-    
-    const handleSearch = (value: string) => {
-        setParams((prev) => ({
-            ...prev,
-            search: value
-        }));
-    };
-    
-    const handleTableChange = (pagination: PaginationType) => {
-        const { pageSize, current } = pagination;
-        setParams((prev) => ({
-            ...prev,
-            limit: pageSize,
-            page: current
-        }));
-        const current_params = new URLSearchParams(search);
-        current_params.set("limit", `${pageSize}`);
-        current_params.set("page", `${current}`);
-        navigate(`?${current_params}`);
-    };
-
-    return (
-        <div>
-            <BrandModal open={modalVisible} handleCancel={handleCancel} update={update}/>
-            <div className='flex justify-between mb-5'>
-                <Search placeholder='Search brand...' searchParamKey='search' onSearch={handleSearch}/>
-                <Button type='primary' className='btn' onClick={() => setModalVisible(true)}>Add Brand</Button>
-            </div>
-            <GlobalTable
-                data={brands}
-                columns={columns}
-                pagination={{
-                    current: params.page,
-                    pageSize: params.limit,
-                    total: count,
-                    showSizeChanger: true,
-                    pageSizeOptions: ['2', '5', '7', '10']
-                }}
-                onChange={handleTableChange}
+  const tableColumns = [
+    {
+      title: '№',
+      dataIndex: 'index',
+      key: 'index',
+      render: (_text: string, _record: any, index: number) =>
+        `${(queryParams.page - 1) * queryParams.limit + index + 1}`,
+    },
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (_text: string, record: any) => (
+        <Space size="middle">
+          <Tooltip title="Edit">
+            <Button
+              type="default"
+              onClick={() => openEditModal(record)}
+              icon={<EditFilled />}
+              style={{ width: "45px", color: "#1890ff", borderColor: "#1890ff" }}
             />
-        </div>
-    );
+          </Tooltip>
+          <Tooltip title="Delete">
+            <Button
+              onClick={() => removeBrandData(record.id)}
+              style={{ width: "45px", color: "#ff4d4f", borderColor: "#ff4d4f" }}
+              icon={<CloseCircleFilled />}
+            />
+          </Tooltip>
+        </Space>
+      ),
+    }
+  ];
+
+  const openEditModal = (brand: any) => {
+    setSelectedBrand(brand);
+    setIsModalVisible(true);
+  };
+
+  const removeBrandData = (id: any) => {
+    removeBrand(id);
+  };
+
+  const closeModal = () => {
+    setSelectedBrand(null);
+    setIsModalVisible(false);
+  };
+
+  const onSearch = (value: string) => {
+    setQueryParams((prev) => ({ ...prev, search: value }));
+  };
+
+  const onTableChange = (pagination: PaginationType) => {
+    const { pageSize, current } = pagination;
+    setQueryParams((prev) => ({ ...prev, limit: pageSize, page: current }));
+
+    const updatedParams = new URLSearchParams(searchParams);
+    updatedParams.set("limit", `${pageSize}`);
+    updatedParams.set("page", `${current}`);
+    navigateTo(`?${updatedParams}`);
+  };
+
+  return (
+    <div>
+      <BrandModal open={isModalVisible} handleCancel={closeModal} update={selectedBrand} />
+      <div className='flex justify-between mb-5'>
+        <Search placeholder='Search brand...' onSearch={onSearch} searchParamKey={''} />
+        <Button type='primary' onClick={() => setIsModalVisible(true)}>Add Brand</Button>
+      </div>
+      <GlobalTable
+        data={brands}
+        columns={tableColumns}
+        pagination={{
+          current: queryParams.page,
+          pageSize: queryParams.limit,
+          total: count,
+          showSizeChanger: true,
+          pageSizeOptions: ['2', '5', '7', '10'],
+        }}
+        onChange={onTableChange}
+      />
+    </div>
+  );
 };
 
-export default Index;
+export default BrandPage;
