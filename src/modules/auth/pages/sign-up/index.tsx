@@ -2,7 +2,7 @@ import { Button, Form, Input } from 'antd';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FormProps } from 'antd';
 import { useSignUpMutation } from '../../hooks/mutations';
-import logo from '../../../../assets/erp_logo.png';
+import logo from '../../../../assets/erp.png';
 
 type FieldType = {
   first_name: string;
@@ -16,23 +16,14 @@ const SignUp = () => {
   const navigate = useNavigate();
   const { mutate } = useSignUpMutation();
 
-  const onFinish: FormProps<FieldType>['onFinish'] = async (values: any) => {
-    mutate(
-      {
-        first_name: values.first_name,
-        last_name: values.last_name,
-        phone_number: values.phone_number,
-        email: values.email,
-        password: values.password,
+  const onFinish: FormProps<FieldType>['onFinish'] = async (values: FieldType) => {
+    mutate(values, {
+      onSuccess: (response: any) => {
+        if (response.status === 201) {
+          navigate('/');
+        }
       },
-      {
-        onSuccess: (response: any) => {
-          if (response.status === 201) {
-            navigate('/');
-          }
-        },
-      }
-    );
+    });
   };
 
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = () => {
@@ -42,15 +33,13 @@ const SignUp = () => {
   return (
     <div className='flex'>
       <div>
-        <img className='h-screen' src={logo} alt="logo" />
+        <img className='h-screen' src={logo} alt="ERP Logo" />
       </div>
       <div className='w-1/2'>
         <div className='h-screen flex flex-col justify-center px-48'>
           <h1 className='flex justify-start mb-8 font-extrabold text-4xl'>Sign Up</h1>
           <Form
-            name="basic"
-            labelCol={{ span: 10 }}
-            wrapperCol={{ span: 500 }}
+            name="signUpForm"
             style={{ maxWidth: 1000 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
@@ -94,7 +83,7 @@ const SignUp = () => {
               <Input.Password style={{ borderColor: '#d55200' }} />
             </Form.Item>
 
-            <Form.Item wrapperCol={{ offset: 0 }}>
+            <Form.Item>
               <Button
                 className='w-full'
                 type="primary"
@@ -103,9 +92,9 @@ const SignUp = () => {
               >
                 Submit
               </Button>
-              <p>
+              <p className="mt-4">
                 Already have an account?{' '}
-                <NavLink to="/" className="font-bold pt-1">LogIn</NavLink>
+                <NavLink to="/" className="font-bold">LogIn</NavLink>
               </p>
             </Form.Item>
           </Form>

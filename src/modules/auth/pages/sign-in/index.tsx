@@ -1,8 +1,8 @@
-import { SignInTypes } from '../../types';
-import { useSignInMutation } from '../../hooks/mutations';
-import logo from '../../../../assets/erp_logo.png';
 import { Button, Form, Input } from 'antd';
 import { NavLink } from 'react-router-dom';
+import { SignInTypes } from '../../types';
+import { useSignInMutation } from '../../hooks/mutations';
+import logo from '../../../../assets/erp.png';
 
 const SignIn = () => {
     const { mutate } = useSignInMutation();

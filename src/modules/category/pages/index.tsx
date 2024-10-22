@@ -8,13 +8,13 @@ import { useDeleteCategory } from "../hooks/mutation";
 import PageModal from "./modal";
 
 const CategoryPage = () => {
+    const [queryParams, setQueryParams] = useState({ limit: 2, page: 1, search: "" });
+    const { search: searchParams } = useLocation();
+    const { mutate: removeCategory } = useDeleteCategory();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [queryParams, setQueryParams] = useState({ limit: 2, page: 1, search: "" });
   const navigateTo = useNavigate();
-  const { search: searchParams } = useLocation();
   const { categories, count } = useGetCategory(queryParams)?.data || {};
-  const { mutate: removeCategory } = useDeleteCategory();
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
@@ -38,14 +38,14 @@ const CategoryPage = () => {
     setSelectedCategory(category);
     setIsModalVisible(true);
   };
-
+  const onSearch = (value: string) => {
+    setQueryParams((prev) => ({ ...prev, search: value }));
+  };
+  
   const deleteCategory = (id: any) => {
     removeCategory(id);
   };
 
-  const onSearch = (value: string) => {
-    setQueryParams((prev) => ({ ...prev, search: value }));
-  };
 
   const columnsDefinition = [
     {

@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Button, Space, Tooltip } from "antd";
 import { useGetBrand } from '../hooks/queries';
-import { useDeleteBrand } from '../hooks/mutations';
-import BrandModal from './modal';
-import { GlobalTable, Search } from '@components';
 import { EditFilled, CloseCircleFilled } from "@ant-design/icons";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PaginationType } from '../types';
+import { useDeleteBrand } from '../hooks/mutations';
+import BrandModal from './modal';
+import { GlobalTable, Search } from '@components';
 
 const BrandPage = () => {
   const [selectedBrand, setSelectedBrand] = useState(null);
@@ -78,15 +78,15 @@ const BrandPage = () => {
   const removeBrandData = (id: any) => {
     removeBrand(id);
   };
-
-  const closeModal = () => {
-    setSelectedBrand(null);
-    setIsModalVisible(false);
-  };
-
   const onSearch = (value: string) => {
     setQueryParams((prev) => ({ ...prev, search: value }));
   };
+  
+  const closeModal = () => {
+      setSelectedBrand(null);
+      setIsModalVisible(false);
+    };
+    
 
   const onTableChange = (pagination: PaginationType) => {
     const { pageSize, current } = pagination;

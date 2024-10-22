@@ -2,10 +2,10 @@ import { useForm } from "antd/lib/form/Form";
 import { BrandType } from "../types";
 import { useEffect, useState } from "react";
 import { ModalPropType } from "@types";
-import { Upload } from "@components";
-import { useGetCategory } from "../../category/hooks/queries";
 import { useCreateBrand, useUpdateBrand } from "../hooks/mutations";
 import { Button, Form, Input, Modal, Select } from "antd";
+import { Upload } from "@components";
+import { useGetCategory } from "../../category/hooks/queries";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -43,8 +43,8 @@ const BrandModalForm = ({ open, handleCancel, update }: ModalPropType) => {
       return;
     }
     const formData = new FormData();
-    formData.append("name", values.name);
     formData.append("description", values.description);
+    formData.append("name", values.name);
     if (values.category_id) {
       formData.append("category_id", values.category_id);
     }
