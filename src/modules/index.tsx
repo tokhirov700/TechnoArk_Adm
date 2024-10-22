@@ -1,8 +1,5 @@
 import loadable from '@loadable/component'
 import { Spinner } from '../components';
-
-
-
 const SignIn = loadable(()=> import("./auth/pages/sign-in"), {fallback: <Spinner/>})
 const SignUp = loadable(()=> import("./auth/pages/sign-up"), {fallback: <Spinner/>})
 const Admin = loadable(()=> import("./admin-layout"), {fallback: <Spinner/>})
@@ -18,3 +15,5 @@ export {
     Category,
     Brands
 }
+
+

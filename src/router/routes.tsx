@@ -22,11 +22,6 @@ const admin = [
         icon: <AppstoreOutlined/>
     },
     {
-        content: "Brand category",
-        path: "/admin-layout/brand-category",
-        icon: <AppstoreAddOutlined/>
-    },
-    {
         content: "Settings",
         path: "/admin-layout/settings",
         icon: <SettingOutlined/>
