@@ -2,13 +2,12 @@ export interface ParamsType {
     search?: string | undefined,
     limit?: number | undefined,
     page?: number | undefined,
-    categories?: any
 }
-export interface ModalPropType{
+export interface ModalPropType {
     id?: number | string,
     open: boolean,
     update: any,
-    handleCancel: ()=>void
+    handleCancel: () => void
 }
 
 export interface ColumnsType {

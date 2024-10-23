@@ -37,9 +37,9 @@ const Index = () => {
         <div className="demo-logo-vertical" />
         <div className="flex justify-center p-4">
           {collapsed ? (
-            <AiOutlineTrademarkCircle className="text-white text-3xl" /> // Icon when collapsed
+            <AiOutlineTrademarkCircle className="text-white text-3xl" /> 
           ) : (
-            <h1 className="text-white font-bold text-lg">TechnoArt</h1> // Text when expanded
+            <h1 className="text-white font-bold text-lg">TechnoArt</h1> 
           )}
         </div>
         <Menu

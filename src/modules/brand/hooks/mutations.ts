@@ -18,14 +18,14 @@ export function useCreateBrand() {
             message: response?.message,
         });
     },
-    onSettled:(_,error)=>{
+    onSettled:async (_,error)=>{
         if(error){
             Notification({
                     type: "success",
                     message: error?.message,
                 });
         }else {
-            queryClient.invalidateQueries({queryKey: ["brand"]})
+           await   queryClient.invalidateQueries({queryKey: ["brand"]})
         }
     }
    })
@@ -42,14 +42,14 @@ export function useUpdateBrand() {
             message: response?.message,
         });
     },
-    onSettled:(_,error)=>{
+    onSettled:async (_,error)=>{
         if(error){
             Notification({
                     type: "success",
                     message: error?.message,
                 });
         }else {
-            queryClient.invalidateQueries({queryKey: ["brand"]})
+            await queryClient.invalidateQueries({queryKey: ["brand"]})
         }
     }
    })
@@ -71,14 +71,14 @@ export function useDeleteBrand() {
             message: response?.message,
         });
     },
-    onSettled:(_,error)=>{
+    onSettled:async (_,error)=>{
         if(error){
             Notification({
                     type: "success",
                     message: error?.message,
                 });
         }else {
-            queryClient.invalidateQueries({queryKey: ["brand"]})
+           await  queryClient.invalidateQueries({queryKey: ["brand"]})
         }
     }
   });

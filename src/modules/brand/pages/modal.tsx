@@ -33,15 +33,19 @@ const BrandModalForm = ({ open, handleCancel, update }: ModalPropType) => {
 
   const handleFormSubmit = async (values: BrandType) => {
     const selectedFile = uploadedFile?.originFileObj || uploadedFile;
-    if (!selectedFile) {
-      form.setFields([
-        {
-          name: "file",
-          errors: ["Upload a file"],
-        },
-      ]);
-      return;
-    }
+    console.log("salom");
+    
+    // if (!selectedFile) {
+    //   form.setFields([
+    //     {
+    //       name: "file",
+    //       errors: ["Upload a file"],
+    //     },
+    //   ]);
+    //   return;
+    // }
+    // console.log("salom")
+
     const formData = new FormData();
     formData.append("description", values.description);
     formData.append("name", values.name);

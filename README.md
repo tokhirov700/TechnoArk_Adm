@@ -48,3 +48,13 @@ export default tseslint.config({
   },
 })
 ```
+
+1 env yozish
+2 search tugirlash
+3 ui
+4 delete qilish
+5 brand update 
+6 create qilganda inputda malumot qolmasligi kerakn
+7 totalni tugirlash 
+ 
+
