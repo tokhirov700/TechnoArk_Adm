@@ -11,7 +11,7 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 const BrandModalForm = ({ open, handleCancel, update }: ModalPropType) => {
-  const [uploadedFile, setUploadedFile] = useState<any>(null);
+  const [uploadedFile, setUploadedFile] = useState<unknown>(null);
   const [form] = useForm();
   const { categories } = useGetCategory({})?.data || {};
   const { mutate: createBrand, isPending: isCreatingBrand } = useCreateBrand();
